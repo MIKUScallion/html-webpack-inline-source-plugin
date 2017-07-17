@@ -13,7 +13,7 @@ You must be running webpack on node 4 or higher
 
 Install the plugin with npm:
 ```shell
-$ npm install --save-dev html-webpack-inline-source-plugin
+$ npm install --save-dev miku-html-webpack-inline-source-plugin
 ```
 
 Basic Usage
@@ -38,7 +38,7 @@ When you set `inlineSource` to a regular expression the source code for any java
 ```javascript
 plugins: [
   new HtmlWebpackPlugin({
-		inlineSource: '.(js|css)$' // embed all javascript and css inline,
+    inlineSource: '.(js|css)$' // embed all javascript and css inline,
     inlineSourceOrder: [/manifest/, /inline/] // add inline order, order as: /manifest/ -> [/0/, /1/] -> /others/
 	}),
   new HtmlWebpackInlineSourcePlugin()
