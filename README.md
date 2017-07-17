@@ -38,7 +38,8 @@ When you set `inlineSource` to a regular expression the source code for any java
 ```javascript
 plugins: [
   new HtmlWebpackPlugin({
-		inlineSource: '.(js|css)$' // embed all javascript and css inline
+		inlineSource: '.(js|css)$' // embed all javascript and css inline,
+    inlineSourceOrder: [/manifest/, /inline/] // add inline order, order as: /manifest/ -> [/0/, /1/] -> /others/
 	}),
   new HtmlWebpackInlineSourcePlugin()
 ]  

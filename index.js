@@ -37,6 +37,14 @@ HtmlWebpackInlineSourcePlugin.prototype.processTags = function (compilation, reg
 
   var regex = new RegExp(regexStr);
 
+  // add inline order, order as: /manifest/ -> [/0/, /1/] -> /others/
+
+  if (pluginData.plugin.options.inlineSourceOrder) {
+    var inlineSourceOrder = pluginData.plugin.options.inlineSourceOrder;
+    pluginData.head = sort('head', inlineSourceOrder, pluginData);
+    pluginData.body = sort('body', inlineSourceOrder, pluginData);
+  }
+
   pluginData.head.forEach(function (tag) {
     head.push(self.processTag(compilation, regex, tag));
   });
@@ -116,5 +124,33 @@ HtmlWebpackInlineSourcePlugin.prototype.processTag = function (compilation, rege
 
   return tag;
 };
+
+function sort (key, inlineSourceOrder, pluginData) {
+  var orderArr = [];
+  var otherArr = [];
+  inlineSourceOrder.forEach(function (regex) {
+    pluginData[key].forEach(function (tag) {
+      if (match(regex, tag)) {
+        orderArr.push(tag);
+      } else {
+        otherArr.push(tag);
+      }
+    });
+  });
+  return unique(orderArr.concat(otherArr));
+}
+function match (regex, tag) {
+  var result = false;
+  if (tag.tagName === 'script' && regex.test(tag.attributes.src)) {
+    result = true;
+  }
+  if (tag.tagName === 'link' && regex.test(tag.attributes.href)) {
+    result = true;
+  }
+  return result;
+}
+function unique (arr) {
+  return Array.from(new Set(arr));
+}
 
 module.exports = HtmlWebpackInlineSourcePlugin;
